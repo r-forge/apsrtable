@@ -8,7 +8,7 @@ apsrtable <- function (...,
                        stars=1,lev=.05,
                        align=c("left","center","right"),
                        order=c("lr","rl","longest"),
-                       notes=list(se.note(),stars.note() ),
+                       notes=list(se.note,stars.note),
                        omitcoef=NULL,coef.names=NULL,
                        coef.rows=2,
                        multicolumn.align=c("center","left","right"),
@@ -278,7 +278,9 @@ model.summaries <- coefPosition(model.summaries, coefnames)
                 sum(unlist(lapply(model.summaries,
                                   function(x) !is.null(x$se))) >0 ) ) ,
                "robust","vcov")
-  notes <- lapply(notes,evalq,env=parent.frame())
+  myenv <- new.env()
+  notes <- lapply(notes, do.call,
+                  args=list(env=myenv))
   
   x <- c(x,"\\\\ \\hline\n")
   notes <- lapply(notes, function(x) {  # eek! note coef cols was wrong
@@ -406,7 +408,7 @@ setGeneric("modelInfo", function(x) standardGeneric("modelInfo") )
 
 modelInfo.summary.lm <- function(x) {
   env <- sys.parent()
-  digits <- evalq(digits, env)
+  digits <- evalq(digits, envir=env)
   model.info <- list(
                      "$N$"=formatC(sum(x$df[1:2]),format="d"),
                      "$R^2$"=formatC(x$r.squared,format="f",digits=digits),
@@ -418,7 +420,7 @@ modelInfo.summary.lm <- function(x) {
 
 modelInfo.summary.glm <- function(x) {
   env <- sys.parent()
-  digits <- evalq(digits, env)
+  digits <- evalq(digits, envir=env)
   model.info <- list(
                        "$N$"=formatC(sum(x$df[1:2]),format="d"),
                        
@@ -442,7 +444,7 @@ modelInfo.summary.glm <- function(x) {
 ## censoring info.. 
 "modelInfo.summary.tobit" <- function(x) {
  env <- sys.parent()
- digits <- evalq(digits, env)
+ digits <- evalq(digits, envir=env)
  model.info <- list(
                     "Total $N$"=formatC(as.integer(x$n[1]),format="d"),
                     "Censored $N$"=formatC(sum(x$n[c(2,4)]),format="d"),
@@ -458,7 +460,7 @@ formatC(x$loglik[2],format="f",digits=digits),
 }
 "modelInfo.summary.gee" <- function(x) {
  env <- sys.parent()
- digits <- evalq(digits, env)
+ digits <- evalq(digits, envir=env)
  model.info <- list(" " = ""
                     )
  class(model.info) <- "model.info"
@@ -467,7 +469,7 @@ formatC(x$loglik[2],format="f",digits=digits),
 
 "modelInfo.summary.coxph" <- function (x) {
        env <- sys.parent()
-       digits <- evalq(digits, env)
+       digits <- evalq(digits, envir=env)
        model.info <- list()
        model.info[["$N$"]] <- x$n
        pv <- formatC(x$waldtest["pvalue"], format="f", digits=digits)
@@ -542,6 +544,7 @@ return(model.summaries)
 }
 
 "se.note" <- function(env) {
+  print(env)
   note <- paste(ifelse( evalq(se,envir=env) != "vcov","Robust s","S"),
                 "tandard errors in parentheses",
                 ifelse(evalq(se,envir=env)=="both",
@@ -562,7 +565,7 @@ return(model.summaries)
 "stars.note" <- function(env) {
   paste(ifelse(evalq(stars,envir=env)=="default",
                paste("$^\\dagger$ significant at $p<.10$; $^* p<.05$; $^{**} p<.01$; $^{***} p<.001$"),
-               paste("$^*$ indicates significance at $p<",evalq(lev,env),"$")))
+               paste("$^*$ indicates significance at $p<",evalq(lev,envir=env),"$")))
 }
 
 ## apsrtableSummary enables easy S3 method masking of summary functions
