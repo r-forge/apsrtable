@@ -1,4 +1,4 @@
-apsrtable <- function (..., 
+﻿apsrtable <- function (..., 
                        se=c("robust","vcov","both","pval"),
                        # model.names can be shorter, others numbered;
                        # numbers start at value of model.counter
@@ -464,6 +464,13 @@ formatC(x$loglik[2],format="f",digits=digits),
  class(model.info) <- "model.info"
  return(model.info)
 }
+
+"modelInfo.summary.mer" <- function (x) {
+	env <- sys.parent()
+	digits <- evalq(digits,env)
+	model.info <- list()
+	model
+  
 
 "modelInfo.summary.coxph" <- function (x) {
        env <- sys.parent()

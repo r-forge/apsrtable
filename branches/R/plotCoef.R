@@ -1,6 +1,6 @@
 plotCoef <- function(model,Main="",YLab="",XLab="",labelDirec=2,CEX=.8,LWD68=1,LWD95=0,vertColor="grey",vertLWD=1,vertType=2,Color="blue",Intercept=TRUE,ShortenFactors=TRUE)
 ## This function plots the coefficients and confidence intervals for a regression (lm or glm)
-## It is designed to replicate the coefficient plots found in Drs. Andrew Gelman and Jennifer Jill's "Data Analysis Using Regression and Multilevel/Hierarchical Models" (page 176, Figure 9.5 for example)
+## It is designed to replicate the coefficient plots found in Drs. Andrew Gelman and Jennifer Hill's "Data Analysis Using Regression and Multilevel/Hierarchical Models" (page 176, Figure 9.5 for example)
 ## This version requires the library ggplot2
 ## This version handles the margins much better so that the coefficient names don't get cut off on the left side
 ## A future version should allow the user to specifiy the coefficient names and order
@@ -136,3 +136,26 @@ plotCoefBase <- function(model,Main="",YLab="",XLab="",labelDirec=2,CEX=.8,LWD68
 }
 
 
+## fortifying functions
+## for lm/glm/mer model objects
+
+## get names of factor terms
+## get levels for factors
+## strip name from levels
+## strip "factor()" from levels
+## get coef order across models and ylim=K
+## fix order to account for factor levels
+## apply pretty names to non-factor terms
+## (optional named list of expressions for levels?)
+## get coefs
+## get CIs - 2SD
+## get CIs - classical t(df=N-K)
+## get CIs - sim
+## coefs,mer-class etc add sigma2 for each grouping factor
+## combine model-coefs-varname-ci into data.frame
+## from K, yspace, nmodels adjust y
+## basic plot (points)
+## CI1 lines
+## CI2 lines
+## verticalbar
+## legend
