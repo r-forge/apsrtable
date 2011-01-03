@@ -16,7 +16,8 @@
                    col.hspace=NULL,
                    Sweave=FALSE, float="table",
                    Minionfig=FALSE,
-                   label=NULL,caption=NULL)}
+                   label=NULL,caption=NULL,
+                   caption.position=c("above","below"))}
 \arguments{
   \item{...}{One or more fitted model objects of a supported class such
     as \code{lm} or \code{glm}. The model-object (a \code{list}) may
@@ -132,6 +133,10 @@
 \item{caption}{A latex string to be used as the caption for the
   table (remember to use double backslashes for latex commands in R).
   Used only when \code{Sweave=FALSE}, unless \code{float="longtable"}.}
+\item{caption.position}{Determines the placement of the caption and
+  label with respect to the tabular environment. (Not thoroughly tested
+  with alternative float environments, but should work with the standard
+  \code{table/tabular} combination.) Default=\code{"above"}}
 }
 
 \value{A character vector containing lines of latex code. It can be
