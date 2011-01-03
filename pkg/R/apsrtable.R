@@ -15,7 +15,8 @@ apsrtable <- function (...,
                        col.hspace=NULL,
                        Sweave=FALSE, float="table",
                        Minionfig=FALSE,
-                       label=NULL,caption=NULL
+                       label=NULL,caption=NULL,
+                       caption.position=c("above","below") 
                        ) {
   x <- list()
   signif.stars <- TRUE
@@ -29,6 +30,7 @@ apsrtable <- function (...,
   adigits <- ifelse(align=="c",
                     -1,
                     digits)
+  caption.position <- match.arg(substr(caption.position,1,1), c("a","b"))
   models <- list(...)
   nmodels <- length(models)
 
@@ -56,15 +58,18 @@ apsrtable <- function (...,
   if(float=="longtable") {
     long <- TRUE
     floatspec <- paste("\\begin{",float,"}",colspec,"\n",
-                       "\\caption{",caption,"}\n\\label{",label,"}",
+                       ifelse(caption.position=="a",
+                              paste("\\caption{",caption,"}\n\\label{",label,"}",sep=""),
+                              ""),
                        sep="")
   } else
   {
     long <- FALSE
     floatspec <- paste(ifelse(!Sweave,
                               paste("\\begin{",float,"}[!ht]\n",
-                                    "\\caption{",caption,
-                                    "}\n\\label{",label,"}",sep=""),
+                                    ifelse(caption.position=="a",
+                                           paste("\\caption{",caption,"}\n\\label{",label,"}",sep=""),
+                                           ""),sep=""),
                               "" ),
                        paste("\n\\begin{tabular}",colspec,sep=""))
   }
@@ -291,6 +296,9 @@ model.summaries <- coefPosition(model.summaries, coefnames)
  
   if(!long) { x <- c(x,"\n\\end{tabular}") }
   if(long) { x <- c(x,"\n\\end{longtable}") }
+  if(caption.position=="b") {
+    x <- c(x, paste("\n\\caption{",caption,"}\n\\label{",label,"}",sep=""))
+  }
   x <- c(x,"\n")
   if(Minionfig) {x <- c(x,"\n\\figureversion{proportional}\n") }
   if(!Sweave & !long) { x <- c(x,paste("\\end{",float,"}\n",sep="")) }
@@ -544,7 +552,6 @@ return(model.summaries)
 }
 
 "se.note" <- function(env) {
-  print(env)
   note <- paste(ifelse( evalq(se,envir=env) != "vcov","Robust s","S"),
                 "tandard errors in parentheses",
                 ifelse(evalq(se,envir=env)=="both",
