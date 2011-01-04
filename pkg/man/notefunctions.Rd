@@ -4,11 +4,15 @@
 \alias{stars.note}
 \alias{pval.note}
 \title{Table notes}
-\usage{se.note()
-stars.note()
-}
 \description{Prepare notes about standard errors and statistical significance}
-
+\usage{se.note(env)
+stars.note(env)
+}
+\arguments{
+  \item{env}{The environment of the \code{apsrtable()} call, because
+    note functions may need to make use of some variables such as
+    \code{lev} or \code{digits}.}
+}
 \details{
 Table notes are part of the tabular environment and may be based on the
 content of the table itself. For example, the \code{stars} argument to
@@ -39,7 +43,7 @@ signif.pct <- function(env) {
 \dontrun{
 apsrtable(lm.D90, lm.D9, glm.D9, digits=1, align="left",
           stars=1, lev=0.05, model.counter=0, order="rl",
-          notes=list(se.note(), signif.pct(), 
+          notes=list(se.note, signif.pct, 
             "Plant weight data from the lm() example" )
 	 )
 }

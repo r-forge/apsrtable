@@ -9,7 +9,7 @@
                    stars=1,lev=.05,
                    align=c("left","center","right"),
                    order=c("lr","rl","longest"),
-                   notes=list(se.note(), stars.note() ),
+                   notes=list(se.note, stars.note),
                    omitcoef=NULL,coef.names=NULL,
                    coef.rows=2,
                    multicolumn.align=c("center","left","right"),
