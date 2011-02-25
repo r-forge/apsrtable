@@ -620,8 +620,8 @@ apsrtableSummary.lrm <- function (x) {
                      "$P$"=formatC(x[5],format="f",digits=digits),
                      "C-index"=formatC(x[6],format="f",digits=digits),
                      "Somers $D_{xy}$"=formatC(x[7],format="f",digits=digits),
-                     "$\\gamma"=formatC(x[8],format="f",digits=digits),
-                     "Kendall's tau-a"=formatC(x[9],format="f",digits=digits),
+                     ##"$\\gamma$"=formatC(x[8],format="f",digits=digits),
+                     ##"Kendall's tau-a"=formatC(x[9],format="f",digits=digits),
                      "Nagelkerke $R^2$"=formatC(x[10],format="f",digits=digits),
                      "Brier" = formatC(x[11],format="f",digits=digits))
   class(model.info) <- "model.info"
