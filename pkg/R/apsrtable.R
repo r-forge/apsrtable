@@ -528,7 +528,7 @@ apsrtableSummary.lrm <- function (x) {
     ##cat("\n")
   }
   else if (!is.null(x$na.action)) 
-    naprint(x$na.action)
+    ##naprint(x$na.action)
   ns <- x$non.slopes
   nstrata <- x$nstrata
   if (!length(nstrata)) 
