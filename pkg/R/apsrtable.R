@@ -97,10 +97,14 @@ apsrtable <- function (...,
                                   x$se <- sqrt(diag(x$se))
                                 } 
                                 s$coefficients[,3] <- tval <- est / x$se
-                                s$coefficients[,4] <-
+                                e <- try(s$coefficients[,4] <-
                                   2 * pt(abs(tval),
                                          length(x$residuals) - x$rank,
-                                         lower.tail=FALSE)
+                                         lower.tail=FALSE),silent=TRUE)
+                                if(inherits(e,"try-error")){
+                                  s$coefficients[, 4] <-
+                                    2*pnorm(abs(tval),lower.tail=FALSE)
+                                }
                                 s$se <- x$se }
                               if(se == "pval") {
                                 s$coefficients[,2] <- s$coefficients[,4]
