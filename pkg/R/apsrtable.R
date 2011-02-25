@@ -600,7 +600,8 @@ apsrtableSummary.lrm <- function (x) {
   class(res) <- "summary.lrm"
   invisible(res)
 }
-modelInfo.summary.lrm <- function(x) {
+
+"modelInfo.summary.lrm" <- function(x) {
   env <- sys.parent()
   digits<- evalq(digits, envir=env)
   x <- as.numeric(x$modelinfo)
@@ -626,6 +627,63 @@ modelInfo.summary.lrm <- function(x) {
   class(model.info) <- "model.info"
   invisible(model.info) 
 }
+
+"apsrtableSummary.mer" <- function(object) {
+  call <- object@call
+  digits <- 2
+  detail <- TRUE
+  ##print (call)
+                                        #object <- summary(object)
+                                        #summ <- summary(object)
+  fcoef <- fixef(object)
+                                        #coefs <- attr(summ, "coefs")
+                                        #useScale <- attr (VarCorr (object), "sc")
+  useScale <- object@dims["useSc"]
+  corF <- vcov(object)@factors$correlation
+  coefs <- cbind(fcoef, corF@sd)
+  if (length (fcoef) > 0){
+    if (!object@dims["useSc"]) {
+      coefs <- coefs[, 1:2, drop = FALSE]
+      stat <- coefs[, 1]/coefs[, 2]
+      pval <- 2 * pnorm(abs(stat), lower = FALSE)
+      coefs <- cbind(coefs, `z value` = stat, `Pr(>|z|)` = pval)
+    }
+    else {
+      stat <- coefs[, 1]/coefs[, 2]
+      coefs <- cbind(coefs, `t value` = stat)
+    }
+    dimnames(coefs)[[2]][1:2] <- c("coef.est", "coef.se")
+    if(detail){
+      pfround (coefs, digits)
+    }
+    else{
+      pfround(coefs[,1:2], digits)
+    }
+  }
+  ##cat("\nError terms:\n")
+  vc <- as.matrix.VarCorr (VarCorr (object), useScale=useScale, digits)
+  ##print (vc[,c(1:2,4:ncol(vc))], quote=FALSE)
+  ngrps <- lapply(object@flist, function(x) length(levels(x)))
+  REML <- object@dims["REML"]
+  llik <- logLik(object, REML)
+  AIC <- AIC(llik)
+  dev <- object@deviance["ML"]     # Dbar
+  n <- object@dims["n"]
+  Dhat <- -2*(llik) # Dhat
+  pD <- dev - Dhat              # pD
+  DIC <- dev + pD               # DIC=Dbar+pD=Dhat+2pD
+  ##cat("---\n")
+  ##cat(sprintf("number of obs: %d, groups: ", n))
+  ##cat(paste(paste(names(ngrps), ngrps, sep = ", "), collapse = "; "))
+  ##cat(sprintf("\nAIC = %g, DIC = ", round(AIC,1)))
+  ##cat(round(DIC, 1))
+  ##cat("\ndeviance =", fround (dev, 1), "\n")
+  if (useScale < 0){
+    overdisp <- paste("overdispersion parameter =", fround (.Call("mer_sigma", object, FALSE, PACKAGE = "lme4"), 1), "\n")
+  }
+}
+setGeneric("apsrtableSummary", def=function(object){standardGeneric("apsrtableSummary")})
+setMethod("apsrtableSummary", signature(object = "mer"), apsrtableSummary.mer)
 
 
 ## tobit requested by Antonio Ramos added by mjm 2009-02-25
@@ -783,6 +841,14 @@ sanitize <- function(str) {
   return(result)
 }
        
+fround <- function (x, digits) {
+    format (round (x, digits), nsmall=digits)
+}
+  
+pfround <- function (x, digits) {
+    print (fround (x, digits), quote=FALSE)
+}
+ 
 
 
 ## A couple of test calls here for random features
