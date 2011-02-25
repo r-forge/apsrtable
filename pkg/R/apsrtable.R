@@ -683,7 +683,7 @@ apsrtableSummary.lrm <- function (x) {
   }
 }
 setGeneric("apsrtableSummary", def=function(object){standardGeneric("apsrtableSummary")})
-setMethod("apsrtableSummary", signature(object = "mer"), apsrtableSummary.mer)
+setMethod("apsrtableSummary", "mer", apsrtableSummary.mer)
 
 
 ## tobit requested by Antonio Ramos added by mjm 2009-02-25
