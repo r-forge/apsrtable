@@ -596,6 +596,7 @@ apsrtableSummary.lrm <- function (x) {
         else vv <- diag(x$var[q, q])
         z <- x$u[q]/sqrt(vv)
         stats <- cbind(z, (1 - pchisq(z^2, 1)))
+
         dimnames(stats) <- list(names(cof[q]), c("Score Z", "P"))
         ##printd(stats, quote = FALSE)
         ##cat("\n")
@@ -710,6 +711,8 @@ setMethod("modelInfo","summary.gee",modelInfo.summary.gee)
 setMethod("modelInfo","summary.coxph",modelInfo.summary.coxph)
 setMethod("modelInfo","summary.negbin",modelInfo.summary.glm)
 setMethod("modelInfo", "summary.lrm", modelInfo.summary.lrm )
+setMethod("modelInfo", "summary.svyglm", apsrtable:::modelInfo.summary.glm )
+
 
 "coef.model.info" <- function(object,...) {
   x <- as.matrix(unlist(object)); invisible(x)
