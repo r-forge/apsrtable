@@ -2,7 +2,9 @@
 \alias{apsrtable}
 \title{APSR-style latex tables with multiple models}
 \description{Produce well-formatted LaTeX tables of multiple models
-  side-by-side. Requires \code{\\usepackage\{dcolumn\}} in Latex/Sweave preamble.}
+  side-by-side. 
+
+*** Requires \code{\\usepackage\{dcolumn\}} in Latex/Sweave preamble. ***}
 \usage{ apsrtable (..., 
                    se=c("robust","vcov","both","pval"),
                    model.names=NULL, model.counter=1, digits=2,
