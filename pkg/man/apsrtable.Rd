@@ -189,10 +189,11 @@
   
 Included are modelInfo functions for \code{lm}, \code{glm}, and \code{
   \link[AER]{tobit}}, \code{\link[survival]{coxph}},
-  \code{\link[survival]{clogit}}, \code{\link[Design]{lrm}}, and a
-  skelton (incomplete \code{modelInfo}) for \code{\link[gee]{gee}}
-  objects. Please email the author any \code{modelInfo} functions you
-  write for different model objects for inclusion in future releases.
+  \code{\link[survival]{clogit}}, and a
+  skeleton (incomplete \code{modelInfo}) for \code{\link[gee]{gee}}
+  and \code{\link[survey]{svyglm}} objects. Please email the author any
+  \code{modelInfo} functions you write for different model objects for
+  inclusion in future releases.
 
 }
 
