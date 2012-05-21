@@ -1,9 +1,9 @@
 ##' APSR-style latex tables with multiple models
-##' 
+##'
 ##' Produce well-formatted LaTeX tables of multiple models side-by-side.
-##' 
+##'
 ##' *** Requires \code{\usepackage{dcolumn}} in Latex/Sweave preamble. ***
-##' 
+##'
 ##' Given one or several model objects of various types, \code{apsrtable()}
 ##' will produce side-by-side output in well-formatted LaTeX using either
 ##' automated numbering or user-supplied model names and \code{dcolumn}
@@ -18,7 +18,7 @@
 ##' decorations or specify another arbitrary level for the test. Finally, some
 ##' model diagnostics are included along with a (somewhat) flexible means to
 ##' program or include different items depending on model object class.
-##' 
+##'
 ##' The argument \code{omitcoef} suppresses the output of specific rows. It may
 ##' be either a valid subscript index (integer or logical if opacity is
 ##' desired, or character for transparency), or an \code{\link{expression}},
@@ -27,14 +27,14 @@
 ##' the union of all model terms, in the desired \code{order}. In the example
 ##' below, \dQuote{(Intercept)} is excluded by a regular expression matching
 ##' the parenthesis.
-##' 
+##'
 ##' To exclude multiple regular expressions, or a mix of expressions with other
 ##' types, you may supply a \link{list}, but you must ensure that the result is
 ##' a valid subscript list: all character, all numeric, or all logical. For
 ##' example, if you refer to a specific coefficient by its character name,
 ##' include the argument \code{value=TRUE} in any \code{\link{grep}}
 ##' expressions in the list.
-##' 
+##'
 ##' Model diagnostic information (\dQuote{model info}) is handled by formal
 ##' \code{\link{modelInfo}} methods defined for model summaries. These methods
 ##' return lists of S3 class \code{model.info}, named formatted (character)
@@ -42,7 +42,7 @@
 ##' fitted model objects but \emph{not their summaries,} write an
 ##' \code{\link{apsrtableSummary}} method to prepare a summary with the items
 ##' needed for your own \code{modelInfo} method.
-##' 
+##'
 ##' Included are modelInfo functions for \code{lm}, \code{glm}, and \code{
 ##' \link[AER]{tobit}}, \code{\link[survival]{coxph}},
 ##' \code{\link[survival]{clogit}}, and a skeleton (incomplete
@@ -50,7 +50,7 @@
 ##' \code{\link[survey]{svyglm}} objects. Please email the author any
 ##' \code{modelInfo} functions you write for different model objects for
 ##' inclusion in future releases.
-##' 
+##'
 ##' @param ... One or more fitted model objects of a supported class such as
 ##' \code{lm} or \code{glm}. The model-object (a \code{list}) may also
 ##' optionally contain an item named \code{se}: \code{model$se} may be a vector
@@ -164,7 +164,7 @@
 ##' creating model summaries that produce results compatible with what
 ##' \code{apsrtable} expects.
 ##' @examples
-##'  
+##'
 ##'      ## Use the example from lm() to show both models:
 ##'      ## Annette Dobson (1990) "An Introduction to Generalized Linear Models".
 ##'      ## Page 9: Plant Weight Data.
@@ -175,13 +175,13 @@
 ##'      lm.D9 <- lm(weight ~ group)
 ##'      glm.D9 <- glm(weight~group)
 ##'      lm.D90 <- lm(weight ~ group - 1) # omitting intercept
-##'      apsrtable(lm.D90, lm.D9, glm.D9, digits=1, align="center", 
+##'      apsrtable(lm.D90, lm.D9, glm.D9, digits=1, align="center",
 ##'                stars="default", model.counter=0, order="rl")
 ##'      \dontrun{
-##' apsrtable(lm.D90, lm.D9, glm.D9, digits=1, align="l", 
+##' apsrtable(lm.D90, lm.D9, glm.D9, digits=1, align="l",
 ##'           stars=1, model.counter=0, order="rl",
 ##'           coef.rows=1, col.hspace="3em", float="sidewaystable")
-##' 
+##'
 ##' ## Omit rows by regular expressions
 ##' apsrtable(lm.D9, omitcoef=expression(grep("\\(",coefnames)))
 ##' apsrtable(lm.D90,lm.D9,
@@ -190,8 +190,8 @@
 ##'             )
 ##'           )
 ##' }
-##' 
-##' 
+##'
+##'
 apsrtable <- function (...,
                        se=c("robust","vcov","both","pval"),
                        # model.names can be shorter, others numbered;
@@ -214,18 +214,23 @@ apsrtable <- function (...,
                        ) {
   x <- list()
   myenv <- new.env()
-  signif.stars <- TRUE
-  order <- match.arg(order,c("lr","rl","longest"))
   opts <- match.call(expand.dots=FALSE)
-  se <- match.arg(se,c("robust","vcov","both","pval"))
+  signif.stars <- TRUE
+
+  order <- match.arg(order,
+                     c("lr","rl","longest"))
+  se <- match.arg(se,
+                  c("robust","vcov","both","pval"))
   align <- substr(align,1,1)
-  align <- match.arg(align,c("l","c","r"))
-  multicolumn.align <- match.arg(substr(multicolumn.align,1,1),
+  align <- match.arg(align,
+                     c("left","center","right"))
+  multicolumn.align <- match.arg(multicolumn.align,
                                  c("c","l","r"))
   adigits <- ifelse(align=="c",
                     -1,
                     digits)
-  caption.position <- match.arg(substr(caption.position,1,1), c("a","b"))
+  caption.position <- match.arg(caption.position,
+                                c("above","below"))
   models <- list(...)
   nmodels <- length(models)
 
