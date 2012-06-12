@@ -191,7 +191,7 @@
 ##'           )
 ##' }
 ##'
-##'
+##' @export
 apsrtable <- function (...,
                        se=c("robust","vcov","both","pval"),
                        # model.names can be shorter, others numbered;
@@ -221,11 +221,12 @@ apsrtable <- function (...,
                      c("lr","rl","longest"))
   se <- match.arg(se,
                   c("robust","vcov","both","pval"))
-  align <- substr(align,1,1)
   align <- match.arg(align,
                      c("left","center","right"))
+  align <- substr(align,1,1)
   multicolumn.align <- match.arg(multicolumn.align,
-                                 c("c","l","r"))
+                                 c("center","left","right"))
+  multicolumn.align <- substr(multicolumn.align,1,1)
   adigits <- ifelse(align=="c",
                     -1,
                     digits)
@@ -296,7 +297,7 @@ apsrtable <- function (...,
           if(class(customSE(x)) == "matrix") {
               x$se <- sqrt(diag(x$se))
           }
-          s$coefficients[,3] <- tval <- est / x$se
+          s$coefficients[,3] <- tval <- est / customSE(x)
           e <- try(s$coefficients[,4] <-
                    2 * pt(abs(tval),
                           length(x$residuals) - x$rank,
@@ -391,7 +392,7 @@ model.summaries <- coefPosition(model.summaries, coefnames)
                                          format="f"),
                                  ")",sep=""),
                            "")
-    if(se=="both" && !is.null(customSE(x$))){
+    if(se=="both" && !is.null(customSE(x))){
       model.se.out[var.pos] <- ifelse(model.se.out != "",
                              paste(model.se.out," [",
                                    formatC(x$coefficients[,2],
