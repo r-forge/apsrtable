@@ -3,23 +3,34 @@
 \alias{apsrtableSummary.gee}
 \alias{apsrtableSummary.lrm}
 \title{Custom summary functions for output tables}
-\usage{\method{apsrtableSummary}{gee}(x)
-\method{apsrtableSummary}{lrm}(x) }
-\arguments{\item{x}{A model object to be summarized in a format suitable
-    for \code{apsrtable} output.}}
-\description{Provide alternative model summaries specifically for use with \code{apsrtable}}
-
-\details{
-When preparing model objects for output, \code{apsrtable} uses primarily the representation of the model provided by its \code{summary} method. However, some packages return summaries with information that can be confusing to \code{apsrtable}. 
-
-In such an event, you have two options: provide a custom \code{apsrtableSummary} method, or work with the package maintainers to produce a suitable \code{summary} object. Ideally, the former is a stopgap for the latter.
+\arguments{
+  \item{x}{A model object to be summarized in a format
+  suitable for \code{apsrtable} output.}
 }
-\value{A \code{summary} representation of a model object, probably derived from the object's own \code{summary} method. }
+\value{
+  A \code{summary} representation of a model object,
+  probably derived from the object's own \code{summary}
+  method.
+}
+\description{
+  Provide alternative model summaries specifically for use
+  with \code{apsrtable}
+}
+\details{
+  When preparing model objects for output, \code{apsrtable}
+  uses primarily the representation of the model provided
+  by its \code{summary} method. However, some packages
+  return summaries with information that can be confusing
+  to \code{apsrtable}.
 
-\author{Michael Malecki <malecki at wustl.edu>}
+  In such an event, you have two options: provide a custom
+  \code{apsrtableSummary} method, or work with the package
+  maintainers to produce a suitable \code{summary} object.
+  Ideally, the former is a stopgap for the latter.
+}
 \examples{
 ### summary.gee produces z scores but not Pr(z). This converts the relevant columns
-### to Pr(z) so that apsrstars() works on it, and places the vector of robust se's in 
+### to Pr(z) so that apsrstars() works on it, and places the vector of robust se's in
 ### an $se position which apsrtable expects.
 
 apsrtableSummary.gee <- function(x) {
@@ -40,7 +51,7 @@ apsrtableSummary.gee <- function(x) {
   return(s)
 }
 }
-
-
-
+\author{
+  Michael Malecki <malecki at wustl.edu>
+}
 
